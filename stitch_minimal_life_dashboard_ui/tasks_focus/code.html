@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-high": "#e1e9ee",
+                    "surface-tint": "#494bd6",
+                    "on-background": "#2a3439",
+                    "surface-container-low": "#f0f4f7",
+                    "on-secondary-container": "#525155",
+                    "tertiary-dim": "#4a536b",
+                    "tertiary-fixed": "#ced6f5",
+                    "error": "#9e3f4e",
+                    "on-secondary-fixed": "#403f43",
+                    "on-secondary-fixed-variant": "#5c5b5f",
+                    "surface-container": "#e8eff3",
+                    "surface-variant": "#d9e4ea",
+                    "tertiary-container": "#ced6f5",
+                    "on-primary-fixed-variant": "#4647d3",
+                    "on-tertiary-fixed-variant": "#4b546d",
+                    "on-primary": "#faf6ff",
+                    "surface-bright": "#f7f9fb",
+                    "inverse-primary": "#8083ff",
+                    "on-tertiary-fixed": "#2f384f",
+                    "primary-fixed": "#e1e0ff",
+                    "secondary-fixed": "#e5e1e6",
+                    "secondary-container": "#e5e1e6",
+                    "secondary-dim": "#545256",
+                    "secondary-fixed-dim": "#d6d3d8",
+                    "outline-variant": "#a9b4b9",
+                    "outline": "#717c82",
+                    "surface-dim": "#cfdce3",
+                    "primary-container": "#e1e0ff",
+                    "on-surface": "#2a3439",
+                    "tertiary-fixed-dim": "#c0c9e6",
+                    "surface": "#f7f9fb",
+                    "primary-fixed-dim": "#d1d0ff",
+                    "on-surface-variant": "#566166",
+                    "tertiary": "#565f78",
+                    "primary": "#494bd6",
+                    "on-primary-container": "#3b3cc9",
+                    "on-tertiary": "#f9f8ff",
+                    "inverse-on-surface": "#9a9d9f",
+                    "secondary": "#605e62",
+                    "on-secondary": "#fbf8fc",
+                    "on-primary-fixed": "#2622b7",
+                    "primary-dim": "#3c3dca",
+                    "inverse-surface": "#0b0f10",
+                    "surface-container-highest": "#d9e4ea",
+                    "error-dim": "#4f0116",
+                    "on-error-container": "#782232",
+                    "background": "#f7f9fb",
+                    "error-container": "#ff8b9a",
+                    "on-error": "#fff7f7",
+                    "on-tertiary-container": "#424a63",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar (Execution from JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-slate-50 dark:bg-slate-950 flex flex-col py-8 px-6 gap-y-4">
+<div class="mb-8 px-2">
+<h1 class="text-xl font-bold text-slate-800 dark:text-slate-200">Daily Life</h1>
+<p class="text-slate-500 dark:text-slate-400 font-sans text-[13px] tracking-wide uppercase font-medium mt-1">The Digital Sanctuary</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 py-3 px-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-[13px] tracking-wide uppercase font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 py-3 px-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-[13px] tracking-wide uppercase font-medium" href="#">
+<span class="material-symbols-outlined">auto_awesome</span>
+                Mood
+            </a>
+<a class="flex items-center gap-3 py-3 px-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-[13px] tracking-wide uppercase font-medium" href="#">
+<span class="material-symbols-outlined">published_with_changes</span>
+                Habits
+            </a>
+<!-- ACTIVE TAB: Tasks -->
+<a class="flex items-center gap-3 py-3 px-3 rounded-lg text-indigo-600 dark:text-indigo-400 font-bold border-r-2 border-indigo-600 transition-all font-sans text-[13px] tracking-wide uppercase" href="#">
+<span class="material-symbols-outlined">check_circle</span>
+                Tasks
+            </a>
+<a class="flex items-center gap-3 py-3 px-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-[13px] tracking-wide uppercase font-medium" href="#">
+<span class="material-symbols-outlined">insights</span>
+                Insights
+            </a>
+<a class="flex items-center gap-3 py-3 px-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all font-sans text-[13px] tracking-wide uppercase font-medium" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto">
+<button class="w-full bg-primary text-on-primary py-3 rounded-full font-medium text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Entry
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar (Execution from JSON) -->
+<header class="w-full sticky top-0 z-40 bg-slate-50/70 dark:bg-slate-900/70 backdrop-blur-xl flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-6">
+<span class="text-lg font-bold tracking-tighter text-slate-900 dark:text-slate-100">Sanctuary</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-full py-1.5 pl-10 pr-4 text-sm w-64 focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400" placeholder="Quick search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-indigo-500 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-500 hover:text-indigo-500 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high ml-2">
+<img alt="User profile" data-alt="minimalist user portrait with neutral colors and clean lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJSE0MXeP8cNDv6XceFxlPbv_kQ55Hk0w2CJLFdiyX1eLSYfFPOzgIdgHXTvuXq_fYYr9xPCBfjVhiFsfY9-NxCbwwWhqISBv7O4ovL9-6fbK72xPxOkJRNhtFelTwydzOKND24swHfQN0-CRoW5cnhgzs8CMkdHncGLcWpGiWjb_mm6UM3JHMnZlteSSdSXNDvz1l-XpvlGjxJBrxP1VEXhKDKu81TnSFJV-vt3BAZ1C1wVfBLRy42EH-mJDk5ALsWE6wJ7L48xOR"/>
+</div>
+</div>
+</header>
+<!-- Focus & Tasks Canvas -->
+<div class="max-w-6xl mx-auto px-10 py-12">
+<div class="mb-12">
+<h2 class="text-4xl font-bold tracking-tight text-on-surface">Focus &amp; Tasks</h2>
+<p class="text-on-surface-variant mt-2 font-medium">Your sanctuary for deep work and intentional progress.</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-8 items-start">
+<!-- Left: Task List (Minimalist Editorial Style) -->
+<section class="col-span-12 lg:col-span-5 space-y-10">
+<!-- Today Section -->
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-[11px] font-bold tracking-[0.1em] text-on-surface-variant uppercase">Today</span>
+<span class="text-[11px] text-primary font-bold">3 Tasks</span>
+</div>
+<div class="space-y-3">
+<div class="group flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-bright transition-colors cursor-pointer">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="flex-1 text-sm font-medium text-on-surface">Deep Work: Interface Design</span>
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary transition-colors text-[20px]">radio_button_unchecked</span>
+</div>
+<div class="group flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-bright transition-colors cursor-pointer">
+<div class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></div>
+<span class="flex-1 text-sm font-medium text-on-surface">System Architecture Review</span>
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary transition-colors text-[20px]">radio_button_unchecked</span>
+</div>
+<div class="group flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-bright transition-colors cursor-pointer">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<span class="flex-1 text-sm font-medium text-on-surface">Client Call: Re-alignment</span>
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary transition-colors text-[20px]">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<!-- Upcoming Section -->
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-[11px] font-bold tracking-[0.1em] text-on-surface-variant uppercase">Upcoming</span>
+</div>
+<div class="space-y-3 opacity-60">
+<div class="group flex items-center gap-4 p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<span class="flex-1 text-sm font-medium text-on-surface">Weekly Retrospective</span>
+<span class="material-symbols-outlined text-surface-variant text-[20px]">event</span>
+</div>
+</div>
+</div>
+<!-- Done Section -->
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-[11px] font-bold tracking-[0.1em] text-on-surface-variant uppercase">Done</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-4 rounded-xl opacity-40">
+<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+<span class="flex-1 text-sm font-medium line-through">Morning Ritual: Meditation</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right: Focus Engine (Glassmorphism & Large Typography) -->
+<section class="col-span-12 lg:col-span-7 sticky top-24">
+<div class="bg-surface-container-low rounded-[2rem] p-12 text-center flex flex-col items-center justify-center min-h-[500px] relative overflow-hidden">
+<!-- Ambient Sound Controls (Floating Top) -->
+<div class="absolute top-8 flex gap-6 px-6 py-2 bg-surface-container-lowest/50 backdrop-blur-md rounded-full border border-white/10">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">water_drop</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">park</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">noise_aware</span></button>
+</div>
+<!-- Timer Display -->
+<div class="mb-4">
+<span class="text-[10px] font-bold tracking-[0.3em] uppercase text-on-surface-variant">Deep Focus Session</span>
+</div>
+<h3 class="text-[120px] font-light tracking-tighter text-on-surface leading-none mb-8">
+                            25:00
+                        </h3>
+<!-- Timer Controls -->
+<div class="flex items-center gap-10">
+<button class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-3xl">refresh</span>
+</button>
+<button class="w-20 h-20 flex items-center justify-center rounded-full bg-primary text-on-primary shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-4xl" data-weight="fill">play_arrow</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-3xl">skip_next</span>
+</button>
+</div>
+<!-- Task Context -->
+<div class="mt-12 flex items-center gap-3 py-2 px-4 bg-surface-container-lowest rounded-full">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<span class="text-xs font-medium text-on-surface">Interface Design</span>
+</div>
+<!-- Subtle Abstract Background Texture -->
+<div class="absolute inset-0 -z-10 opacity-10 pointer-events-none">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary blur-[100px] rounded-full"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-tertiary blur-[100px] rounded-full"></div>
+</div>
+</div>
+<!-- Focus Insights Card -->
+<div class="mt-8 grid grid-cols-2 gap-8">
+<div class="bg-surface-container-lowest p-6 rounded-2xl">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block mb-2">Total Focus</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-on-surface">4.2</span>
+<span class="text-sm font-medium text-on-surface-variant">hours today</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block mb-2">Deep Work Streaks</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-on-surface">8</span>
+<span class="text-sm font-medium text-on-surface-variant">days active</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Hidden on Focused Task Screens per mandate, but included if user requested interaction - suppressed here for extreme focus) -->
+</body></html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2f384f",
+                        "tertiary-fixed": "#ced6f5",
+                        "outline": "#717c82",
+                        "error-container": "#ff8b9a",
+                        "outline-variant": "#a9b4b9",
+                        "primary-fixed-dim": "#d1d0ff",
+                        "secondary-container": "#e5e1e6",
+                        "background": "#f7f9fb",
+                        "inverse-surface": "#0b0f10",
+                        "on-secondary-fixed-variant": "#5c5b5f",
+                        "secondary-fixed": "#e5e1e6",
+                        "on-secondary-fixed": "#403f43",
+                        "inverse-primary": "#8083ff",
+                        "tertiary-dim": "#4a536b",
+                        "secondary": "#605e62",
+                        "on-primary-container": "#3b3cc9",
+                        "on-secondary-container": "#525155",
+                        "on-primary-fixed-variant": "#4647d3",
+                        "surface-dim": "#cfdce3",
+                        "surface-bright": "#f7f9fb",
+                        "on-tertiary": "#f9f8ff",
+                        "on-secondary": "#fbf8fc",
+                        "surface-container-low": "#f0f4f7",
+                        "surface-container": "#e8eff3",
+                        "on-error": "#fff7f7",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed-dim": "#c0c9e6",
+                        "secondary-fixed-dim": "#d6d3d8",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-dim": "#545256",
+                        "on-surface": "#2a3439",
+                        "on-tertiary-fixed-variant": "#4b546d",
+                        "tertiary": "#565f78",
+                        "surface-container-high": "#e1e9ee",
+                        "surface-variant": "#d9e4ea",
+                        "surface-tint": "#494bd6",
+                        "inverse-on-surface": "#9a9d9f",
+                        "error": "#9e3f4e",
+                        "error-dim": "#4f0116",
+                        "on-surface-variant": "#566166",
+                        "on-background": "#2a3439",
+                        "surface": "#f7f9fb",
+                        "primary": "#494bd6",
+                        "on-primary": "#faf6ff",
+                        "on-primary-fixed": "#2622b7",
+                        "primary-container": "#e1e0ff",
+                        "primary-dim": "#3c3dca",
+                        "on-error-container": "#782232",
+                        "surface-container-highest": "#d9e4ea",
+                        "on-tertiary-container": "#424a63",
+                        "tertiary-container": "#ced6f5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "16px",
+                        "xl": "24px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#f0f4f7] dark:bg-slate-900 flex flex-col py-8 px-4 gap-2 z-40">
+<div class="px-4 mb-8">
+<h1 class="text-lg font-bold text-slate-800 dark:text-slate-100">Sanctuary</h1>
+<div class="mt-6 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVVOqPxNhughDtslEwBuXJOGPnS8WacNqeGOuD2DzYdm0uQre1XZQQF9VWp2MKYjp9saJ1TosfdIyJdrf8APne0dZxuxn9MfGT-AN609CPNYhUgw8huAu7UT8DRMMFCnlauFbNcZw2Jo0NfE13uLLyeXltsAWjYT2SplSjVnOG_AhXpmItE4bdrpLqlLNeaIhmKzn7M_YLMsc5LhScGCfA7_eCpbI08vZs00QjabZ2u_5c4byK6_EgoIBLNQPhXqpmI64c4epfPbvg"/>
+</div>
+<div>
+<p class="font-['Inter'] text-sm tracking-wide font-semibold text-slate-800 dark:text-slate-100">Julian</p>
+<p class="font-['Inter'] text-xs text-slate-500 dark:text-slate-400">Stay Present</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Inter'] text-sm tracking-wide hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Inter'] text-sm tracking-wide hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Insights</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Inter'] text-sm tracking-wide hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="self_care">self_care</span>
+<span>Wellness</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Inter'] text-sm tracking-wide hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Archive</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 rounded-lg font-medium shadow-sm font-['Inter'] text-sm tracking-wide scale-95 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings_accessibility">settings_accessibility</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-1 pt-4">
+<button class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Inter'] text-sm tracking-wide hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>Help</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Inter'] text-sm tracking-wide hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- Top Nav mimics SCREEN_7 structure -->
+<header class="w-full sticky top-0 z-40 bg-surface/70 backdrop-blur-xl flex justify-between items-center px-10 h-16">
+<div class="flex items-center gap-6">
+<span class="text-lg font-bold tracking-tighter text-slate-900 dark:text-slate-100">Sanctuary</span>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-full py-1.5 pl-10 pr-4 text-sm w-64 focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400" placeholder="Quick search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-indigo-500 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-500 hover:text-indigo-500 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high ml-2">
+<img alt="User profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVVOqPxNhughDtslEwBuXJOGPnS8WacNqeGOuD2DzYdm0uQre1XZQQF9VWp2MKYjp9saJ1TosfdIyJdrf8APne0dZxuxn9MfGT-AN609CPNYhUgw8huAu7UT8DRMMFCnlauFbNcZw2Jo0NfE13uLLyeXltsAWjYT2SplSjVnOG_AhXpmItE4bdrpLqlLNeaIhmKzn7M_YLMsc5LhScGCfA7_eCpbI08vZs00QjabZ2u_5c4byK6_EgoIBLNQPhXqpmI64c4epfPbvg"/>
+</div>
+</div>
+</header>
+<div class="max-w-6xl mx-auto px-10 py-12">
+<header class="mb-12">
+<h2 class="text-4xl font-bold tracking-tight text-on-surface">Settings</h2>
+<p class="text-on-surface-variant mt-2 font-medium">Manage your sanctuary preferences and account details for a more focused experience.</p>
+</header>
+<!-- Two-Column Layout (Bento Grid Style from SCREEN_7) -->
+<div class="grid grid-cols-12 gap-8 items-start">
+<!-- Left Column: Settings Navigation -->
+<aside class="col-span-12 lg:col-span-4 space-y-8">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-[11px] font-bold tracking-[0.1em] text-on-surface-variant uppercase">Navigation</span>
+</div>
+<ul class="space-y-2">
+<li>
+<button class="w-full flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest text-primary font-bold shadow-sm ring-1 ring-primary/5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="text-sm">Profile</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-4 p-4 rounded-xl bg-transparent hover:bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-all">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+<span class="text-sm font-medium">Account</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-4 p-4 rounded-xl bg-transparent hover:bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-all">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+<span class="text-sm font-medium">Notifications</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-4 p-4 rounded-xl bg-transparent hover:bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-all">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+<span class="text-sm font-medium">Privacy</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-4 p-4 rounded-xl bg-transparent hover:bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-all">
+<span class="w-1.5 h-1.5 rounded-full bg-transparent"></span>
+<span class="text-sm font-medium">Appearance</span>
+</button>
+</li>
+</ul>
+</div>
+<!-- Visual Summary mimicking SCREEN_7's stats cards -->
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block mb-2">Account Status</span>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold text-on-surface">Pro</span>
+<span class="text-sm font-medium text-on-surface-variant">Plan</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Right Column: Settings Panels -->
+<section class="col-span-12 lg:col-span-8 space-y-12">
+<!-- Profile Section Panel -->
+<div class="bg-surface-container-low rounded-[2rem] p-10 space-y-8">
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] font-bold tracking-[0.3em] uppercase text-on-surface-variant">Profile Settings</span>
+</div>
+<div class="flex items-center gap-8">
+<div class="relative group">
+<div class="w-24 h-24 rounded-full bg-surface-container-highest overflow-hidden ring-4 ring-white">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWaJkWPtJPaMnCo1uKTRKeSkpbsVD-XoG3viguxYmBl6kayUMSLLgT7PMkVaTikvdarAawBrx5Q5U56Ur3qYDBVHamNZz5T8HXJg_PPCZjXL3Oc6_Pedzq1m7_Z_8ms2y2vhKhJAq6fw0-XDJ8P0LfGY9TOo9na50MMvtvP7lbOA8R2pH8_fCueoTw6WuB6CVorcUARg5mIB4JVO-3aTSLHM9MYzgSuwjd1LhfGwYpOeC3E8_TAFuFkUt1sAO8AHD5T6lv8Xr2z9SU"/>
+</div>
+<button class="absolute inset-0 flex items-center justify-center bg-on-surface/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
+<span class="material-symbols-outlined text-white" data-icon="photo_camera">photo_camera</span>
+</button>
+</div>
+<div class="space-y-1">
+<p class="text-on-surface font-bold text-lg">Your Avatar</p>
+<p class="text-sm text-on-surface-variant">Recommended size: 400x400px. JPG or PNG.</p>
+<button class="mt-2 text-sm font-bold text-primary hover:underline">Upload new image</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-3">
+<label class="block text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Display Name</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-xl p-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" placeholder="Your name" type="text" value="Julian"/>
+</div>
+<div class="space-y-3">
+<label class="block text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Email Address</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-xl p-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" placeholder="your@email.com" type="email" value="julian@sanctuary.app"/>
+</div>
+</div>
+</div>
+<!-- Notifications Panel -->
+<div class="bg-surface-container-low rounded-[2rem] p-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="text-[10px] font-bold tracking-[0.3em] uppercase text-on-surface-variant">Preferences</span>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-2xl">
+<div>
+<p class="font-bold text-on-surface text-sm">Daily Reminders</p>
+<p class="text-xs text-on-surface-variant">Gentle nudges for your morning mantra and meditation.</p>
+</div>
+<button class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+<span class="inline-block h-4 w-4 transform rounded-full bg-white transition translate-x-6"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-2xl">
+<div>
+<p class="font-bold text-on-surface text-sm">Weekly Reports</p>
+<p class="text-xs text-on-surface-variant">A summary of your focus hours and wellness insights.</p>
+</div>
+<button class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+<span class="inline-block h-4 w-4 transform rounded-full bg-white transition translate-x-6"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- Appearance Panel -->
+<div class="bg-surface-container-low rounded-[2rem] p-10 space-y-10">
+<div class="space-y-6">
+<p class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">Interface Mode</p>
+<div class="grid grid-cols-2 gap-6">
+<div class="relative cursor-pointer group">
+<div class="aspect-video bg-white rounded-2xl p-3 ring-2 ring-primary shadow-lg">
+<div class="w-full h-full bg-surface-container-low rounded-xl overflow-hidden p-4 space-y-2">
+<div class="w-2/3 h-2 bg-surface-container-highest rounded-full"></div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+<p class="mt-3 text-xs font-bold text-center text-on-surface">Light</p>
+</div>
+<div class="relative cursor-pointer group opacity-60 hover:opacity-100 transition-opacity">
+<div class="aspect-video bg-slate-900 rounded-2xl p-3 shadow-lg">
+<div class="w-full h-full bg-slate-800 rounded-xl overflow-hidden p-4 space-y-2">
+<div class="w-2/3 h-2 bg-slate-700 rounded-full"></div>
+<div class="w-full h-2 bg-slate-700 rounded-full"></div>
+</div>
+</div>
+<p class="mt-3 text-xs font-bold text-center text-on-surface">Dark</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex justify-end gap-6 pt-4 pb-20">
+<button class="px-10 py-4 rounded-full bg-surface-container-highest text-on-surface font-bold text-sm transition-all hover:bg-surface-container-high">Discard Changes</button>
+<button class="px-10 py-4 rounded-full bg-gradient-to-br from-primary to-primary-dim text-white font-bold text-sm shadow-xl shadow-primary/20 transition-all hover:scale-105 active:scale-95">Save Preferences</button>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

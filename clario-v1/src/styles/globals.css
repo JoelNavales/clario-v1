@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* ── Surfaces ── */
+  --color-background: #f7f9fb;
+  --color-surface: #f7f9fb;
+  --color-surface-bright: #f7f9fb;
+  --color-surface-dim: #cfdce3;
+  --color-surface-variant: #d9e4ea;
+  --color-surface-tint: #494bd6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f0f4f7;
+  --color-surface-container: #e8eff3;
+  --color-surface-container-high: #e1e9ee;
+  --color-surface-container-highest: #d9e4ea;
+
+  /* ── Primary ── */
+  --color-primary: #494bd6;
+  --color-primary-dim: #3c3dca;
+  --color-primary-fixed: #e1e0ff;
+  --color-primary-fixed-dim: #d1d0ff;
+  --color-primary-container: #e1e0ff;
+  --color-on-primary: #faf6ff;
+  --color-on-primary-container: #3b3cc9;
+  --color-on-primary-fixed: #2622b7;
+  --color-on-primary-fixed-variant: #4647d3;
+  --color-inverse-primary: #8083ff;
+
+  /* ── Secondary ── */
+  --color-secondary: #605e62;
+  --color-secondary-dim: #545256;
+  --color-secondary-container: #e5e1e6;
+  --color-secondary-fixed: #e5e1e6;
+  --color-secondary-fixed-dim: #d6d3d8;
+  --color-on-secondary: #fbf8fc;
+  --color-on-secondary-container: #525155;
+  --color-on-secondary-fixed: #403f43;
+  --color-on-secondary-fixed-variant: #5c5b5f;
+
+  /* ── Tertiary ── */
+  --color-tertiary: #565f78;
+  --color-tertiary-dim: #4a536b;
+  --color-tertiary-fixed: #ced6f5;
+  --color-tertiary-fixed-dim: #c0c9e6;
+  --color-tertiary-container: #ced6f5;
+  --color-on-tertiary: #f9f8ff;
+  --color-on-tertiary-container: #424a63;
+  --color-on-tertiary-fixed: #2f384f;
+  --color-on-tertiary-fixed-variant: #4b546d;
+
+  /* ── On-Surface tokens ── */
+  --color-on-background: #2a3439;
+  --color-on-surface: #2a3439;
+  --color-on-surface-variant: #566166;
+  --color-inverse-surface: #0b0f10;
+  --color-inverse-on-surface: #9a9d9f;
+
+  /* ── Outline ── */
+  --color-outline: #717c82;
+  --color-outline-variant: #a9b4b9;
+
+  /* ── Error ── */
+  --color-error: #9e3f4e;
+  --color-error-dim: #4f0116;
+  --color-error-container: #ff8b9a;
+  --color-on-error: #fff7f7;
+  --color-on-error-container: #782232;
+}
+
+@layer base {
+  .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+  }
+}
+
+@utility bg-primary-gradient {
+  background: linear-gradient(145deg, var(--color-primary) 0%, var(--color-primary-dim) 100%);
+}
+
+@utility glass-nav {
+  background-color: rgb(247 249 251 / 0.7);
+  backdrop-filter: blur(20px);
+}
