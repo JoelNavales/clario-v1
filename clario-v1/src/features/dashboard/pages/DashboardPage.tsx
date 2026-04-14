@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppShell } from "../../../components/layout/AppShell";
 import { getFromStorage, setToStorage, todayStr } from "../../../utils/localStorage";
 import type { MoodEntry, MoodValue, Habit, HabitLog, Task, Profile } from "../../../types/appTypes";
+import DashboardSvg from "../../../assets/Dashboard.svg";
 
 const MOODS: { value: MoodValue; icon: string; emoji: string }[] = [
   { value: "heavy", icon: "sentiment_very_dissatisfied", emoji: "😔" },
@@ -58,7 +59,9 @@ export default function DashboardPage() {
   const todayLogs = habitLogs.filter((l) => l.log_date === today);
   const todayTasks = tasks.filter((t) => !t.completed).slice(0, 4);
 
-  const todayMood = moods.find((m) => m.mood_date === today);
+  const todayMood = [...moods]
+    .filter((m) => m.mood_date === today)
+    .sort((a, b) => Number(b.id) - Number(a.id))[0];
 
   useEffect(() => {
     const id = setInterval(() => setTime(getLocalTime()), 30_000);
@@ -68,9 +71,8 @@ export default function DashboardPage() {
   const logMood = useCallback(
     (mood: MoodValue) => {
       const existing = getFromStorage<MoodEntry[]>("clario_moods", []);
-      const filtered = existing.filter((m) => m.mood_date !== today);
       const updated: MoodEntry[] = [
-        ...filtered,
+        ...existing,
         { id: Date.now().toString(), mood, mood_date: today, note: "" },
       ];
       setToStorage("clario_moods", updated);
@@ -106,7 +108,13 @@ export default function DashboardPage() {
     <AppShell>
       {/* Sticky top bar */}
       <header className="hidden md:flex sticky top-0 z-40 glass-nav justify-between items-center px-10 h-16 border-b border-surface-container-high/50">
-        <span className="text-base font-bold tracking-tighter text-slate-800">Clario</span>
+        <div className="h-8 w-28 md:h-9 md:w-36 overflow-hidden rounded-sm">
+          <img
+            src={DashboardSvg}
+            alt="Clario"
+            className="h-full w-full object-cover [clip-path:inset(1%_4%_1%_4%)]"
+          />
+        </div>
         <div className="flex items-center gap-3">
           <button className="text-slate-500 hover:text-primary transition-colors">
             <span className="material-symbols-outlined">notifications</span>

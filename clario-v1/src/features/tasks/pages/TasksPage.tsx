@@ -4,6 +4,7 @@ import { Button } from "../../../components/ui/Button";
 import { getFromStorage, setToStorage, todayStr } from "../../../utils/localStorage";
 import type { Task, Priority, TaskFolder } from "../../../types/appTypes";
 import clsx from "clsx";
+import DashboardSvg from "../../../assets/Dashboard.svg";
 
 const PRIORITY_OPTIONS: { value: Priority; label: string; dotClass: string }[] = [
   { value: "high", label: "High", dotClass: "bg-primary" },
@@ -201,16 +202,11 @@ export default function TasksPage() {
       {/* Top bar */}
       <header className="hidden md:flex sticky top-0 z-40 glass-nav justify-between items-center px-10 h-16 border-b border-surface-container-high/50">
         <div className="flex items-center gap-6">
-          <span className="text-base font-bold tracking-tighter text-slate-800">Clario</span>
-          <div className="relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
-              search
-            </span>
-            <input
-              className="bg-surface-container-low border-none rounded-full py-1.5 pl-10 pr-4 text-sm w-56 focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400"
-              placeholder="Quick search..."
-              type="text"
-              readOnly
+          <div className="h-8 w-28 md:h-9 md:w-36 overflow-hidden rounded-sm">
+            <img
+              src={DashboardSvg}
+              alt="Clario"
+              className="h-full w-full object-cover [clip-path:inset(5%_4%_1%_4%)]"
             />
           </div>
         </div>

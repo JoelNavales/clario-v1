@@ -1,9 +1,10 @@
 import { AppShell } from "../../../components/layout/AppShell";
 import { Button } from "../../../components/ui/Button";
 import { useInsights } from "../../../hooks/useInsights";
+import { NavLink } from "react-router-dom";
 
 export default function InsightsPage() {
-  const { insights, isLoading, generate } = useInsights();
+  const { insights, isLoading, generate, error } = useInsights();
   const hasInsights = insights.length > 0;
 
   return (
@@ -11,9 +12,37 @@ export default function InsightsPage() {
       {/* Top bar */}
       <header className="hidden md:flex sticky top-0 z-40 glass-nav justify-between items-center px-12 py-5 border-b border-surface-container-high/50">
         <nav className="flex gap-8">
-          <span className="text-slate-500 font-semibold tracking-tight text-sm">Mantra</span>
-          <span className="text-slate-500 font-semibold tracking-tight text-sm">Journal</span>
-          <span className="text-primary border-b-2 border-primary pb-0.5 font-semibold tracking-tight text-sm">Focus</span>
+          <NavLink
+            to="/insights/mantra"
+            className={({ isActive }) =>
+              isActive
+                ? "text-primary border-b-2 border-primary pb-0.5 font-semibold tracking-tight text-sm"
+                : "text-slate-500 font-semibold tracking-tight text-sm"
+            }
+          >
+            Mantra
+          </NavLink>
+          <NavLink
+            to="/insights/journal"
+            className={({ isActive }) =>
+              isActive
+                ? "text-primary border-b-2 border-primary pb-0.5 font-semibold tracking-tight text-sm"
+                : "text-slate-500 font-semibold tracking-tight text-sm"
+            }
+          >
+            Journal
+          </NavLink>
+          <NavLink
+            to="/insights"
+            end
+            className={({ isActive }) =>
+              isActive
+                ? "text-primary border-b-2 border-primary pb-0.5 font-semibold tracking-tight text-sm"
+                : "text-slate-500 font-semibold tracking-tight text-sm"
+            }
+          >
+            Focus
+          </NavLink>
         </nav>
         <div className="flex items-center gap-4">
           <button className="text-slate-500 hover:text-primary transition-colors">
@@ -87,11 +116,15 @@ export default function InsightsPage() {
               <h3 className="text-lg font-semibold text-on-surface">
                 {hasInsights ? `${insights.length} Insights Generated` : "Your Insights"}
               </h3>
-              <Button onClick={generate} loading={isLoading}>
+              <Button onClick={() => void generate()} loading={isLoading}>
                 <span className="material-symbols-outlined text-[16px]">auto_awesome</span>
                 {isLoading ? "Analyzing…" : "Generate Insights"}
               </Button>
             </div>
+
+            {error && (
+              <p className="text-xs text-error">Insight generation temporarily failed. A fallback response is shown.</p>
+            )}
 
             {/* Insights list */}
             {hasInsights && !isLoading && (

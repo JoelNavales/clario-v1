@@ -10,6 +10,12 @@ export interface InsightInput {
   tasks: Task[];
 }
 
+interface InsightsApiResponse {
+  insights?: unknown;
+}
+
+const REMOTE_AI_ENABLED = (import.meta.env["VITE_ENABLE_REMOTE_AI"] as string | undefined) === "true";
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 export function getMoodScore(mood: string): number {
@@ -57,7 +63,7 @@ function getLastNDays(n: number): string[] {
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-export function generateInsights({ moods, habits, habitLogs, tasks }: InsightInput): string[] {
+function generateRuleBasedInsights({ moods, habits, habitLogs, tasks }: InsightInput): string[] {
   const insights: string[] = [];
   const habitsByDay = countCompletedHabitsPerDay(habitLogs);
 
@@ -149,7 +155,52 @@ export function generateInsights({ moods, habits, habitLogs, tasks }: InsightInp
     }
   }
 
-  const result = insights.length > 0 ? insights : ["Start tracking more data to get insights."];
+  return insights.length > 0 ? insights : ["Start tracking more data to get insights."];
+}
+
+async function fetchRemoteInsights(input: InsightInput): Promise<string[] | null> {
+  if (!REMOTE_AI_ENABLED) return null;
+
+  const endpoint = (import.meta.env["VITE_AI_INSIGHTS_ENDPOINT"] as string | undefined)?.trim();
+  if (!endpoint) return null;
+
+  const timeoutMs = Number(import.meta.env["VITE_AI_TIMEOUT_MS"] ?? 12000);
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input }),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const payload = (await response.json()) as InsightsApiResponse;
+    if (!Array.isArray(payload.insights)) {
+      return null;
+    }
+
+    const clean = payload.insights
+      .filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+      .map((item) => item.trim())
+      .slice(0, 8);
+
+    return clean.length > 0 ? clean : null;
+  } catch {
+    return null;
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+export async function generateInsights(input: InsightInput): Promise<string[]> {
+  const remote = await fetchRemoteInsights(input);
+  const result = remote ?? generateRuleBasedInsights(input);
   setToStorage("clario_insights", result);
   return result;
 }

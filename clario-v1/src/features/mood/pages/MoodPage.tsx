@@ -3,6 +3,7 @@ import { AppShell } from "../../../components/layout/AppShell";
 import { Button } from "../../../components/ui/Button";
 import { getFromStorage, setToStorage, todayStr } from "../../../utils/localStorage";
 import type { MoodEntry, MoodValue } from "../../../types/appTypes";
+import DashboardSvg from "../../../assets/Dashboard.svg";
 
 const MOODS: { value: MoodValue; icon: string; label: string }[] = [
   { value: "heavy", icon: "sentiment_very_dissatisfied", label: "Heavy" },
@@ -31,35 +32,39 @@ export default function MoodPage() {
   const [moods, setMoods] = useState<MoodEntry[]>(() =>
     getFromStorage<MoodEntry[]>("clario_moods", [])
   );
-  const [selected, setSelected] = useState<MoodValue | null>(
-    () => (moods.find((m) => m.mood_date === today)?.mood ?? null)
-  );
-  const [note, setNote] = useState(
-    () => moods.find((m) => m.mood_date === today)?.note ?? ""
-  );
+  const [selected, setSelected] = useState<MoodValue | null>(null);
+  const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
 
   const quote = QUOTES[new Date().getDay() % QUOTES.length];
 
   function saveEntry() {
     if (!selected) return;
-    const filtered = moods.filter((m) => m.mood_date !== today);
     const entry: MoodEntry = {
       id: Date.now().toString(),
       mood: selected,
       mood_date: today,
       note,
     };
-    const updated = [...filtered, entry];
+    const updated = [...moods, entry];
     setToStorage("clario_moods", updated);
     setMoods(updated);
+    setSelected(null);
+    setNote("");
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
 
+  function moodEntryTime(entry: MoodEntry) {
+    const parsed = Number(entry.id);
+    return Number.isFinite(parsed) ? parsed : new Date(entry.mood_date).getTime();
+  }
+
   const recent = [...moods]
-    .sort((a, b) => new Date(b.mood_date).getTime() - new Date(a.mood_date).getTime())
+    .sort((a, b) => moodEntryTime(b) - moodEntryTime(a))
     .slice(0, 7);
+
+  const todayEntries = recent.filter((entry) => entry.mood_date === today);
 
   const MOOD_COLOR: Record<MoodValue, string> = {
     heavy: "text-error",
@@ -74,7 +79,13 @@ export default function MoodPage() {
       {/* Top bar */}
       <header className="hidden md:flex sticky top-0 z-40 glass-nav justify-between items-center px-10 h-16 border-b border-surface-container-high/50">
         <div className="flex items-center gap-3">
-          <span className="text-base font-bold tracking-tighter text-slate-800">Clario</span>
+          <div className="h-8 w-28 md:h-9 md:w-36 overflow-hidden rounded-sm">
+            <img
+              src={DashboardSvg}
+              alt="Clario"
+              className="h-full w-full object-cover [clip-path:inset(5%_4%_1%_4%)]"
+            />
+          </div>
         </div>
         <div className="text-right">
           <p className="text-sm text-on-surface-variant font-medium">
@@ -131,6 +142,29 @@ export default function MoodPage() {
                   </span>
                 </button>
               ))}
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-[11px] uppercase tracking-widest text-on-surface-variant font-bold">
+                Today's Logs ({todayEntries.length})
+              </p>
+              {todayEntries.length === 0 ? (
+                <p className="text-xs text-on-surface-variant">No logs yet today.</p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {todayEntries.map((entry) => (
+                    <span
+                      key={entry.id}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-surface-container-low px-3 py-1 text-[11px] font-medium text-on-surface"
+                    >
+                      <span className={`material-symbols-outlined text-sm ${MOOD_COLOR[entry.mood]}`}>
+                        {MOODS.find((m) => m.value === entry.mood)?.icon}
+                      </span>
+                      {entry.mood}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Note */}

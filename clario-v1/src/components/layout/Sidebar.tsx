@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { getFromStorage } from "../../utils/localStorage";
 import type { Profile } from "../../types/appTypes";
+import DashboardSvg from "../../assets/Dashboard.svg";
 
 const NAV_ITEMS = [
   { to: "/", label: "Dashboard", icon: "dashboard" },
@@ -48,7 +49,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Brand */}
         <div className="px-4 mb-10">
           <div className="flex items-center justify-between">
-            <h1 className="text-lg font-bold text-slate-800 tracking-tighter">Clario</h1>
+            <div className="h-9 w-36 overflow-hidden rounded-sm">
+              <img
+                src={DashboardSvg}
+                alt="Clario"
+                className="h-full w-full object-cover [clip-path:inset(5%_4%_1%_4%)]"
+              />
+            </div>
             {/* Close button — mobile only */}
             <button
               onClick={onClose}
