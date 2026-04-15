@@ -34,9 +34,19 @@ export interface Task {
   created_at: string; // ISO datetime
   completed_at?: string;
   folder_id?: string;
+  deadline?: string; // ISO datetime e.g. "2026-04-20T17:00"
 }
 
 export interface Profile {
   name: string;
   email?: string;
+}
+
+export interface DailyReflection {
+  date: string;         // YYYY-MM-DD
+  dayFeeling: MoodValue;
+  aiReflection: string;
+  tasksCompleted: number;
+  habitsCompleted: number;
+  totalHabits: number;
 }

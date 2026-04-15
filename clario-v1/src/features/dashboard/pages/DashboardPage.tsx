@@ -1,9 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { AppShell } from "../../../components/layout/AppShell";
 import { getFromStorage, setToStorage, todayStr } from "../../../utils/localStorage";
-import type { MoodEntry, MoodValue, Habit, HabitLog, Task, Profile } from "../../../types/appTypes";
-import DashboardSvg from "../../../assets/Dashboard.svg";
+import type { MoodEntry, MoodValue, Habit, HabitLog, Task, Profile, DailyReflection } from "../../../types/appTypes";
+import { ClarioLogo } from "../../../components/ui/ClarioLogo";
+import { DailyReflectionModal } from "../components/DailyReflectionModal";
+import { StreakCard } from "../components/StreakCard";
+import { getMoodStreak, getHabitStreak, getTaskStreak } from "../../../utils/streaks";
 
 const MOODS: { value: MoodValue; icon: string; emoji: string }[] = [
   { value: "heavy", icon: "sentiment_very_dissatisfied", emoji: "😔" },
@@ -48,6 +52,7 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const timer = useTimer();
   const [time, setTime] = useState(getLocalTime);
+  const [reflectionOpen, setReflectionOpen] = useState(false);
   const profile = getFromStorage<Profile>("clario_profile", { name: "You" });
 
   const moods = getFromStorage<MoodEntry[]>("clario_moods", []);
@@ -58,6 +63,13 @@ export default function DashboardPage() {
   const today = todayStr();
   const todayLogs = habitLogs.filter((l) => l.log_date === today);
   const todayTasks = tasks.filter((t) => !t.completed).slice(0, 4);
+  const todayReflection = getFromStorage<DailyReflection[]>("clario_reflections", []).find(
+    (r) => r.date === today
+  );
+
+  const moodStreak  = getMoodStreak(moods);
+  const habitStreak = getHabitStreak(habitLogs);
+  const taskStreak  = getTaskStreak(tasks);
 
   const todayMood = [...moods]
     .filter((m) => m.mood_date === today)
@@ -108,12 +120,8 @@ export default function DashboardPage() {
     <AppShell>
       {/* Sticky top bar */}
       <header className="hidden md:flex sticky top-0 z-40 glass-nav justify-between items-center px-10 h-16 border-b border-surface-container-high/50">
-        <div className="h-8 w-28 md:h-9 md:w-36 overflow-hidden rounded-sm">
-          <img
-            src={DashboardSvg}
-            alt="Clario"
-            className="h-full w-full object-cover [clip-path:inset(1%_4%_1%_4%)]"
-          />
+        <div className="h-10 w-36 md:h-12 md:w-52 overflow-hidden">
+          <ClarioLogo className="h-full w-full" />
         </div>
         <div className="flex items-center gap-3">
           <button className="text-slate-500 hover:text-primary transition-colors">
@@ -232,6 +240,55 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Streak System */}
+        <div className="grid grid-cols-12 gap-6">
+          <StreakCard
+            moodStreak={moodStreak}
+            habitStreak={habitStreak}
+            taskStreak={taskStreak}
+          />
+        </div>
+
+        {/* Daily Reflection banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.4, ease: "easeOut" }}
+          className="relative overflow-hidden rounded-2xl bg-primary-container/40 border border-primary/10 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-[0_12px_40px_rgba(42,52,57,0.04)]"
+        >
+          {/* Background decoration */}
+          <div className="absolute right-0 top-0 w-40 h-full opacity-10 pointer-events-none">
+            <span className="material-symbols-outlined text-primary text-[180px] absolute -right-6 -top-4">auto_stories</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-primary-container flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-primary text-2xl">nights_stay</span>
+            </div>
+            <div>
+              <span className="text-[11px] uppercase tracking-widest text-on-surface-variant font-bold">End of Day</span>
+              <h3 className="text-lg font-semibold text-on-surface">
+                {todayReflection ? "Reflection complete ✓" : "Daily Reflection"}
+              </h3>
+              <p className="text-sm text-on-surface-variant">
+                {todayReflection
+                  ? `Today felt ${todayReflection.dayFeeling} · ${todayReflection.tasksCompleted} tasks · ${todayReflection.habitsCompleted}/${todayReflection.totalHabits} habits`
+                  : "Wrap up your day with a quick reflection and AI insight."}
+              </p>
+            </div>
+          </div>
+
+          <motion.button
+            onClick={() => setReflectionOpen(true)}
+            whileHover={{ y: -2 }}
+            whileTap={{ y: 1, scale: 0.98 }}
+            className="shrink-0 bg-primary-gradient text-on-primary px-6 py-3 rounded-2xl font-semibold text-sm flex items-center gap-2 shadow-sm"
+          >
+            <span className="material-symbols-outlined text-[18px]">{todayReflection ? "edit" : "auto_awesome"}</span>
+            {todayReflection ? "Edit Reflection" : "Start Reflection"}
+          </motion.button>
+        </motion.div>
+
         {/* Bento row 2 */}
         <div className="grid grid-cols-12 gap-6">
           {/* Daily Habits */}
@@ -307,6 +364,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      <DailyReflectionModal
+        isOpen={reflectionOpen}
+        onClose={() => setReflectionOpen(false)}
+        userName={profile.name}
+      />
+       
     </AppShell>
   );
 }

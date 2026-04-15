@@ -3,7 +3,7 @@ import { AppShell } from "../../../components/layout/AppShell";
 import { Button } from "../../../components/ui/Button";
 import { getFromStorage, setToStorage, todayStr } from "../../../utils/localStorage";
 import type { MoodEntry, MoodValue } from "../../../types/appTypes";
-import DashboardSvg from "../../../assets/Dashboard.svg";
+import { ClarioLogo } from "../../../components/ui/ClarioLogo";
 
 const MOODS: { value: MoodValue; icon: string; label: string }[] = [
   { value: "heavy", icon: "sentiment_very_dissatisfied", label: "Heavy" },
@@ -79,12 +79,8 @@ export default function MoodPage() {
       {/* Top bar */}
       <header className="hidden md:flex sticky top-0 z-40 glass-nav justify-between items-center px-10 h-16 border-b border-surface-container-high/50">
         <div className="flex items-center gap-3">
-          <div className="h-8 w-28 md:h-9 md:w-36 overflow-hidden rounded-sm">
-            <img
-              src={DashboardSvg}
-              alt="Clario"
-              className="h-full w-full object-cover [clip-path:inset(5%_4%_1%_4%)]"
-            />
+          <div className="h-10 w-36 md:h-12 md:w-52 overflow-hidden">
+            <ClarioLogo className="h-full w-full"  />
           </div>
         </div>
         <div className="text-right">

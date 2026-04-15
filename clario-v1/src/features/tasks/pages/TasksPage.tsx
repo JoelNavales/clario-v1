@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { AppShell } from "../../../components/layout/AppShell";
 import { Button } from "../../../components/ui/Button";
 import { getFromStorage, setToStorage, todayStr } from "../../../utils/localStorage";
 import type { Task, Priority, TaskFolder } from "../../../types/appTypes";
 import clsx from "clsx";
-import DashboardSvg from "../../../assets/Dashboard.svg";
+import { ClarioLogo } from "../../../components/ui/ClarioLogo";
 
 const PRIORITY_OPTIONS: { value: Priority; label: string; dotClass: string }[] = [
   { value: "high", label: "High", dotClass: "bg-primary" },
@@ -55,6 +56,7 @@ export default function TasksPage() {
   const [newTitle, setNewTitle] = useState("");
   const [newPriority, setNewPriority] = useState<Priority>("medium");
   const [newFolderId, setNewFolderId] = useState<string>("");
+  const [newDeadline, setNewDeadline] = useState("");
   const [showAdd, setShowAdd] = useState(false);
 
   // View mode: "tasks" | "folders"
@@ -103,13 +105,15 @@ export default function TasksPage() {
       priority: newPriority,
       created_at: new Date().toISOString(),
       folder_id: newFolderId || undefined,
+      deadline: newDeadline || undefined,
     };
     const updated = [...tasks, task];
     setTasks(updated);
     setToStorage("clario_tasks", updated);
     setNewTitle("");
+    setNewDeadline("");
     setShowAdd(false);
-  }, [tasks, newTitle, newPriority, newFolderId]);
+  }, [tasks, newTitle, newPriority, newFolderId, newDeadline]);
 
   const deleteTask = useCallback(
     (id: string) => {
@@ -156,30 +160,85 @@ export default function TasksPage() {
   const allDone = tasks.filter((t) => t.completed).length;
   const allOpen = tasks.filter((t) => !t.completed).length;
 
+  // ── Smart Prioritization ──────────────────────────────────────────────────
+  const [taskView, setTaskView] = useState<"date" | "priority">("date");
+
+  const hour = new Date().getHours();
+  const timeOfDay =
+    hour >= 5 && hour < 12 ? "morning" : hour >= 12 && hour < 17 ? "afternoon" : "evening";
+  const suggestedPriority: Priority =
+    timeOfDay === "morning" ? "high" : timeOfDay === "afternoon" ? "medium" : "low";
+  const suggestedTask =
+    visibleTasks.find((t) => !t.completed && t.priority === suggestedPriority) ??
+    visibleTasks.find((t) => !t.completed);
+  const PRIORITY_COUNTS = {
+    high:   visibleTasks.filter((t) => !t.completed && t.priority === "high").length,
+    medium: visibleTasks.filter((t) => !t.completed && t.priority === "medium").length,
+    low:    visibleTasks.filter((t) => !t.completed && t.priority === "low").length,
+  };
+  const SUGGEST_MESSAGES: Record<string, string> = {
+    morning:   "You perform better in the morning — tackle your hardest task first.",
+    afternoon: "Keep the momentum going — work through your medium-priority tasks.",
+    evening:   "Wind down productively — clear low-effort tasks before the day ends.",
+  };
+  const PRIORITY_GROUPS: { priority: Priority; label: string; dotClass: string; emptyText: string }[] = [
+    { priority: "high",   label: "High Priority",   dotClass: "bg-primary",             emptyText: "No high-priority tasks." },
+    { priority: "medium", label: "Medium Priority",  dotClass: "bg-tertiary-fixed-dim",  emptyText: "No medium-priority tasks." },
+    { priority: "low",    label: "Low Priority",     dotClass: "bg-outline-variant",     emptyText: "No low-priority tasks." },
+  ];
+
   // ── Sub-components ───────────────────────────────────────────────────────
   function TaskItem({ task, showPriority = true }: { task: Task; showPriority?: boolean }) {
     const dot = PRIORITY_OPTIONS.find((p) => p.value === task.priority)?.dotClass ?? "bg-outline-variant";
     const folder = folders.find((f) => f.id === task.folder_id);
+
+    const now = new Date();
+    const deadlineDate = task.deadline ? new Date(task.deadline) : null;
+    const isOverdue = deadlineDate && !task.completed && deadlineDate < now;
+    const isDueSoon = deadlineDate && !task.completed && !isOverdue &&
+      deadlineDate.getTime() - now.getTime() < 24 * 60 * 60 * 1000;
+    const deadlineLabel = deadlineDate
+      ? deadlineDate.toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+      : null;
+
     return (
-      <div className="group flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest hover:bg-surface-bright transition-colors">
-        {showPriority && <div className={`w-2 h-2 rounded-full shrink-0 ${dot}`} />}
+      <div className={clsx(
+        "group flex items-start gap-4 p-4 rounded-xl transition-colors",
+        isOverdue
+          ? "bg-error/5 border border-error/20 hover:bg-error/10"
+          : "bg-surface-container-lowest hover:bg-surface-bright"
+      )}>
+        {showPriority && <div className={`w-2 h-2 rounded-full shrink-0 mt-1.5 ${dot}`} />}
         <div className="flex-1 min-w-0">
           <span
             className={clsx("block text-sm font-medium truncate", task.completed ? "line-through text-on-surface-variant" : "text-on-surface")}
           >
             {task.title}
           </span>
-          {folder && !activeFolder && (
-            <span className={`inline-flex items-center gap-1 mt-0.5 text-[10px] font-semibold`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${folder.color}`} />
-              <span className="text-on-surface-variant">{folder.name}</span>
-            </span>
-          )}
+          <div className="flex items-center flex-wrap gap-2 mt-0.5">
+            {folder && !activeFolder && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold">
+                <span className={`w-1.5 h-1.5 rounded-full ${folder.color}`} />
+                <span className="text-on-surface-variant">{folder.name}</span>
+              </span>
+            )}
+            {deadlineLabel && (
+              <span className={clsx(
+                "inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full",
+                isOverdue  && "bg-error/15 text-error",
+                isDueSoon  && !isOverdue && "bg-tertiary-fixed-dim/30 text-on-surface-variant",
+                !isOverdue && !isDueSoon && "bg-surface-container text-on-surface-variant/70",
+              )}>
+                <span className="material-symbols-outlined text-[10px]">schedule</span>
+                {isOverdue && "Overdue · "}{deadlineLabel}
+              </span>
+            )}
+          </div>
         </div>
         <button
           onClick={() => toggleTask(task.id)}
           className={clsx(
-            "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0",
+            "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0 mt-0.5",
             task.completed ? "bg-primary border-primary" : "border-outline-variant group-hover:border-primary"
           )}
         >
@@ -189,7 +248,7 @@ export default function TasksPage() {
         </button>
         <button
           onClick={() => deleteTask(task.id)}
-          className="opacity-0 group-hover:opacity-100 transition-opacity text-on-surface-variant hover:text-error"
+          className="opacity-0 group-hover:opacity-100 transition-opacity text-on-surface-variant hover:text-error mt-0.5"
         >
           <span className="material-symbols-outlined text-[16px]">close</span>
         </button>
@@ -202,13 +261,9 @@ export default function TasksPage() {
       {/* Top bar */}
       <header className="hidden md:flex sticky top-0 z-40 glass-nav justify-between items-center px-10 h-16 border-b border-surface-container-high/50">
         <div className="flex items-center gap-6">
-          <div className="h-8 w-28 md:h-9 md:w-36 overflow-hidden rounded-sm">
-            <img
-              src={DashboardSvg}
-              alt="Clario"
-              className="h-full w-full object-cover [clip-path:inset(5%_4%_1%_4%)]"
-            />
-          </div>
+          <div className="h-10 w-36 md:h-12 md:w-52 overflow-hidden">
+          <ClarioLogo className="h-full w-full" />
+        </div>
         </div>
         <div className="flex items-center gap-3">
           <button className="text-slate-500 hover:text-primary transition-colors">
@@ -437,6 +492,7 @@ export default function TasksPage() {
         <div className={clsx("grid grid-cols-12 gap-8 items-start", view === "folders" && "hidden")}>
           {/* Left: Task list */}
           <section className="col-span-12 lg:col-span-6 space-y-8">
+
             {/* Add task button */}
             <div className="flex justify-end">
               <Button variant="ghost" size="sm" onClick={() => setShowAdd((v) => !v)}>
@@ -504,6 +560,28 @@ export default function TasksPage() {
                     ))}
                   </div>
                 )}
+                {/* Deadline picker */}
+                <div className="flex flex-col gap-1 pt-1 border-t border-surface-container">
+                  <label className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[13px]">event</span>
+                    Deadline (optional)
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={newDeadline}
+                    onChange={(e) => setNewDeadline(e.target.value)}
+                    className="text-sm bg-surface-container-low rounded-xl px-4 py-2 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 w-full"
+                  />
+                  {newDeadline && (
+                    <button
+                      onClick={() => setNewDeadline("")}
+                      className="self-start text-[11px] text-on-surface-variant hover:text-error flex items-center gap-1"
+                    >
+                      <span className="material-symbols-outlined text-[13px]">close</span>
+                      Clear deadline
+                    </button>
+                  )}
+                </div>
                 <div className="flex justify-end">
                   <Button size="sm" onClick={addTask} disabled={!newTitle.trim()}>
                     Add Task
@@ -512,6 +590,90 @@ export default function TasksPage() {
               </div>
             )}
 
+            {/* View toggle: By Date / By Priority */}
+            <div className="flex items-center gap-1 bg-surface-container-low rounded-xl p-1 self-start">
+              <button
+                onClick={() => setTaskView("date")}
+                className={clsx(
+                  "flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  taskView === "date"
+                    ? "bg-surface-container-lowest text-on-surface shadow-sm"
+                    : "text-on-surface-variant hover:text-on-surface"
+                )}
+              >
+                <span className="material-symbols-outlined text-[14px]">calendar_today</span>
+                By Date
+              </button>
+              <button
+                onClick={() => setTaskView("priority")}
+                className={clsx(
+                  "flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  taskView === "priority"
+                    ? "bg-surface-container-lowest text-on-surface shadow-sm"
+                    : "text-on-surface-variant hover:text-on-surface"
+                )}
+              >
+                <span className="material-symbols-outlined text-[14px]">filter_list</span>
+                By Priority
+              </button>
+            </div>
+
+            <AnimatePresence mode="wait">
+            {taskView === "priority" ? (
+              <motion.div
+                key="priority"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="space-y-8"
+              >
+                {PRIORITY_GROUPS.map(({ priority, label, dotClass, emptyText }) => {
+                  const group = visibleTasks.filter((t) => !t.completed && t.priority === priority);
+                  return (
+                    <div key={priority}>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className={`w-2 h-2 rounded-full ${dotClass}`} />
+                          <span className="text-[11px] font-bold tracking-[0.1em] text-on-surface-variant uppercase">
+                            {label}
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-primary font-bold">{group.length}</span>
+                      </div>
+                      <div className="space-y-2">
+                        {group.length === 0 ? (
+                          <p className="text-sm text-on-surface-variant/50 py-2 italic">{emptyText}</p>
+                        ) : (
+                          group.map((t) => <TaskItem key={t.id} task={t} />)
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+                {/* Done */}
+                {done.length > 0 && (
+                  <div>
+                    <div className="mb-3">
+                      <span className="text-[11px] font-bold tracking-[0.1em] text-on-surface-variant uppercase">Done</span>
+                    </div>
+                    <div className="space-y-2">
+                      {done.slice(0, 5).map((t) => (
+                        <TaskItem key={t.id} task={t} showPriority={false} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="date"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="space-y-8"
+              >
             {/* Today */}
             <div>
               <div className="flex items-center justify-between mb-3">
@@ -555,10 +717,76 @@ export default function TasksPage() {
                 </div>
               </div>
             )}
+              </motion.div>
+            )}
+            </AnimatePresence>
           </section>
 
           {/* Right: Focus timer */}
           <section className="col-span-12 lg:col-span-6 space-y-5">
+
+            {/* Smart Prioritization banner */}
+            {visibleTasks.some((t) => !t.completed) && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.36, ease: "easeOut" }}
+                className="relative overflow-hidden rounded-2xl bg-primary-container/40 border border-primary/10 p-5 shadow-[0_4px_16px_rgba(42,52,57,0.06)]"
+              >
+                <span className="material-symbols-outlined text-primary text-[100px] absolute -right-3 -top-3 opacity-[0.07] pointer-events-none select-none">
+                  auto_awesome
+                </span>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-2xl bg-primary-container flex items-center justify-center shrink-0">
+                    <span className="material-symbols-outlined text-primary text-[20px]">tips_and_updates</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">
+                      Smart Prioritization
+                    </span>
+                    <p className="text-sm text-on-surface-variant mt-0.5">{SUGGEST_MESSAGES[timeOfDay]}</p>
+                    {suggestedTask && (
+                      <div className="mt-3 flex items-center gap-2.5 bg-surface-container-lowest rounded-xl px-3 py-2.5 border border-primary/10">
+                        <span className="material-symbols-outlined text-primary text-[16px]">chevron_right</span>
+                        <span className="text-sm font-semibold text-on-surface flex-1 truncate">
+                          {suggestedTask.title}
+                        </span>
+                        <span className={clsx(
+                          "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full",
+                          suggestedTask.priority === "high"   && "bg-primary/15 text-primary",
+                          suggestedTask.priority === "medium" && "bg-tertiary-fixed-dim/30 text-on-surface-variant",
+                          suggestedTask.priority === "low"    && "bg-surface-container text-on-surface-variant/60",
+                        )}>
+                          {suggestedTask.priority}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 mt-3 flex-wrap">
+                      {(["high", "medium", "low"] as Priority[]).map((p) => (
+                        <span
+                          key={p}
+                          className={clsx(
+                            "flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full",
+                            p === "high"   && "bg-primary/10 text-primary",
+                            p === "medium" && "bg-surface-container text-on-surface-variant",
+                            p === "low"    && "bg-surface-container text-on-surface-variant/60",
+                          )}
+                        >
+                          <span className={clsx(
+                            "w-1.5 h-1.5 rounded-full",
+                            p === "high"   && "bg-primary",
+                            p === "medium" && "bg-tertiary-fixed-dim",
+                            p === "low"    && "bg-outline-variant",
+                          )} />
+                          {PRIORITY_COUNTS[p]} {p}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             <div className="bg-surface-container-lowest rounded-2xl p-8 shadow-[0_12px_40px_rgba(42,52,57,0.04)] flex flex-col items-center gap-5 text-center">
               <div className="flex gap-6 text-on-surface-variant">
                 <span className="material-symbols-outlined">local_drink</span>
