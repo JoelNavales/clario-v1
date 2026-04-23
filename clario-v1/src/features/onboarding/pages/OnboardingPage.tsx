@@ -163,15 +163,17 @@ export default function OnboardingPage() {
             key={step}
             custom={direction}
             variants={slideVariants}
-            initial="enter"
+            initial={step === "name" ? false : "enter"}
             animate="center"
             exit="exit"
+            className="w-full"
+            style={{ willChange: "transform, opacity" }}
             transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] as [number, number, number, number] }}
           >
 
             {/* ── Step 1: Name ─────────────────────────────────────────── */}
             {step === "name" && (
-              <motion.div className="space-y-8" variants={stagger} initial="hidden" animate="visible">
+              <motion.div className="min-h-[28rem] space-y-8" variants={stagger} initial="hidden" animate="visible">
                 <motion.div variants={fadeUp} className="space-y-3">
                   <div className="mb-6 h-14 w-56 sm:h-20 sm:w-80 overflow-hidden">
                     <ClarioLogo className="h-full w-full" />
@@ -213,7 +215,7 @@ export default function OnboardingPage() {
 
             {/* ── Step 2: Theme ─────────────────────────────────────────── */}
             {step === "theme" && (
-              <motion.div className="space-y-8" variants={stagger} initial="hidden" animate="visible">
+              <motion.div className="min-h-[28rem] space-y-8" variants={stagger} initial="hidden" animate="visible">
                 <motion.div variants={fadeUp} className="space-y-3">
                   <motion.div
                     className="w-14 h-14 rounded-2xl bg-primary-container flex items-center justify-center mb-6"
@@ -286,7 +288,7 @@ export default function OnboardingPage() {
 
             {/* ── Step 3: Done ──────────────────────────────────────────── */}
             {step === "done" && (
-              <motion.div className="space-y-8 text-center" variants={stagger} initial="hidden" animate="visible">
+              <motion.div className="min-h-[28rem] space-y-8 text-center" variants={stagger} initial="hidden" animate="visible">
                 <motion.div className="flex justify-center" variants={fadeUp}>
                   <motion.div
                     className="w-20 h-20 rounded-3xl bg-primary-container flex items-center justify-center"
