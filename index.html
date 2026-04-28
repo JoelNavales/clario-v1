@@ -11,10 +11,20 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Restores route/query/hash after GitHub Pages redirects to /?/...
+      (function (location) {
+        if (location.search.startsWith("?/") || location.search.startsWith("&/")) {
+          var decoded = location.search.slice(1).replace(/~and~/g, "&");
+          var restored = decoded.replace("/", "?");
+          window.history.replaceState(null, "", location.pathname + restored + location.hash);
+        }
+      })(window.location);
+    </script>
     <script type="module" crossorigin src="/clario-v1/assets/index-CdLqt-uM.js"></script>
     <link rel="stylesheet" crossorigin href="/clario-v1/assets/index-DC6d9cb9.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting...</title>
+    <script>
+      // GitHub Pages SPA redirect fallback.
+      // Set segmentCount=1 for project pages (username.github.io/repo-name).
+      // Set segmentCount=0 for username.github.io root or custom domains.
+      (function (location) {
+        var segmentCount = 1;
+        var pathSegments = location.pathname.split("/").slice(0, 1 + segmentCount).join("/");
+        var routePath = location.pathname.slice(pathSegments.length).replace(/^\/+/, "");
+        var query = location.search ? "&" + location.search.slice(1).replace(/&/g, "~and~") : "";
+        var encodedRoute = routePath.replace(/&/g, "~and~");
+        var port = location.port ? ":" + location.port : "";
+
+        location.replace(
+          location.protocol +
+            "//" +
+            location.hostname +
+            port +
+            pathSegments +
+            "/?/" +
+            encodedRoute +
+            query +
+            location.hash
+        );
+      })(window.location);
+    </script>
+  </head>
+  <body></body>
+</html>
